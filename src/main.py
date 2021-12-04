@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 from components.crossword import Crossword
 
 if __name__ == "__main__":  # pragma: no cover
-    cw =Crossword()
+    cw = Crossword(cell_x=90, cell_y=90)
     cw.run()
     # w, h = 1280, 768
     # x, y = 28, 28
