@@ -45,7 +45,11 @@ class Crossword:
         b_font = ImageFont.truetype("/home/isoran/workspace/crossword/src/resources/fonts/ARIBLK.TTF", 60,
                                     encoding="unic")
 
+        b_font_stroke = ImageFont.truetype("/home/isoran/workspace/crossword/src/resources/fonts/ARIBLK.TTF", 54,
+                                    encoding="unic")
+
         for i, element in enumerate(self._offset_dictionary):
+            found = False
             for j, letter in enumerate(element["word"]):
                 off_vert = element["offset"]
                 poz_x = ((j - off_vert) * self._cell_x + self._MARGIN_X + self._GLOBAL_OFFSET,
@@ -69,8 +73,14 @@ class Crossword:
                               self._GLOBAL_OFFSET + text_width_off,
                               i * self._cell_y + self._MARGIN_Y + text_height_off)
 
-                # draw.rectangle(shape, fill="#FFFFFF", outline="black")
+                shape_font_stroke = None
+                if element["letter"] == letter.upper() and not found:
+                    found = True
+                    shape_font_stroke = ((j - off_vert) * self._cell_x + self._MARGIN_X +
+                                         self._GLOBAL_OFFSET + text_width_off - 2,
+                                         i * self._cell_y + self._MARGIN_Y + text_height_off)
 
+                # draw.rectangle(shape, fill="#FFFFFF", outline="black")
                 # if off_vert == j:
                 #     if element["letter"] == "i".upper():
                 #         ##shape_font = (j * Sx + x - off_vert * Sx + global_shift + Sx / 2.5, i * Sy + y + Sy / 8)
@@ -96,13 +106,16 @@ class Crossword:
 
                 # else:
                 cell = Cell(font=b_font,
+                            font_stroke=b_font_stroke,
                             canvas=self._canvas,
                             text_display=letter.upper(),
                             background_col="white",
                             text_col="black",
                             stroke_col="red",
                             shape_rect=shape,
-                            shape_text=shape_font)
+                            shape_text=shape_font,
+                            shape_text_stroke=shape_font_stroke
+                            )
                 self._cells.append(cell)
                 # draw.text(shape_font, list_nume[i][j], fill="black", font=font, align="middle")
 
@@ -125,7 +138,7 @@ class Crossword:
 
         self._render_all()
 
-        self._save_image()
+        self._save_image("pupikii_poza.png")
 
         #value = input("Enter de cateva ori sa iesi sau apasa X din colt")
 
@@ -185,5 +198,5 @@ class Crossword:
 
         self._cw_image.show()
 
-    def _save_image(self):
-        self._cw_image.save(config.IMAGE_PATH + "pupikii_poza.png", "PNG", trasparency=0)
+    def _save_image(self, img_name):
+        self._cw_image.save(config.IMAGE_PATH + img_name, "PNG", trasparency=0)
