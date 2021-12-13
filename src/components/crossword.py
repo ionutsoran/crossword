@@ -1,12 +1,14 @@
 """
-Copyright Ionut Soran 2021
+Copyright Ionut Soran 2021. ALL RIGHTS RESERVED.
 Authors: [Ionut Soran]
 Maintainers: [Ionut Soran]
+Crossword class for handling all the logic of the crossword design and rendering.
 """
-from PIL import Image, ImageDraw, ImageFont
-import src.config as config
-from src.components.cell import Cell
-from src.components.render_util import get_text_dimensions, center_text
+from PIL import Image, ImageDraw
+import config
+from components.cell import Cell
+from components.render_util import get_text_dimensions, center_text, get_font_from_resources
+from components.cellpoint import CellPoint
 
 
 class Crossword:
@@ -15,6 +17,12 @@ class Crossword:
     """
 
     def __init__(self, cw_image=None, cell_x=30, cell_y=30):
+        """
+        Initialization of the main crossword class with pre-defined settings or parameterized settings
+        :param cw_image: Image size to be set up at initialization
+        :param cell_x: Size of the cell on the x-axis
+        :param cell_y: Size of the cell on the y-axis
+        """
         self._cell_x, self._cell_y = cell_x, cell_y
         self._MARGIN_X, self._MARGIN_Y = 28, 28
         self._cw_width, self._cw_height = 800, 600
@@ -39,85 +47,39 @@ class Crossword:
     def _setup_cells(self):
         """
         Method to calculate the positions of each cell and letter
-        :return:
+        :return: None
         """
-        # TODO Refactor this method ASAP, move the specific implementation of each type of cell in a strategy like
-        b_font = ImageFont.truetype("/home/isoran/workspace/crossword/src/resources/fonts/ARIBLK.TTF", 60,
-                                    encoding="unic")
+        font = get_font_from_resources(config.FONTS["arial"]["black"], 60)
 
-        b_font_stroke = ImageFont.truetype("/home/isoran/workspace/crossword/src/resources/fonts/ARIBLK.TTF", 54,
-                                    encoding="unic")
+        font_stroke = get_font_from_resources(config.FONTS["arial"]["black"], 54)
 
         for i, element in enumerate(self._offset_dictionary):
             found = False
             for j, letter in enumerate(element["word"]):
                 off_vert = element["offset"]
-                poz_x = ((j - off_vert) * self._cell_x + self._MARGIN_X + self._GLOBAL_OFFSET,
-                         i * self._cell_y + self._MARGIN_Y)
-                poz_y = ((j - off_vert + 1) * self._cell_x + self._MARGIN_X + self._GLOBAL_OFFSET,
-                         (i + 1) * self._cell_y + self._MARGIN_Y)
 
-                shape = (poz_x, poz_y)
+                shape = self._get_shape_for_cell(i, j, off_vert)
 
-                text_width, text_height = get_text_dimensions(element["letter"], font=b_font)
-                text_width_off, text_height_off = center_text(
-                    (self._cell_x, self._cell_y),
-                    (text_width, text_height))
-
-                # if element["letter"] == "i".upper():
-                #     shape_font = ((j - off_vert) * self._cell_x + self._MARGIN_X +
-                #                   self._GLOBAL_OFFSET + self._cell_x / 2.5,
-                #                   i * self._cell_y + self._MARGIN_Y - self._cell_y / 4)
-                # else:
-                shape_font = ((j - off_vert) * self._cell_x + self._MARGIN_X +
-                              self._GLOBAL_OFFSET + text_width_off,
-                              i * self._cell_y + self._MARGIN_Y + text_height_off)
+                poz_font = self._get_shape_for_font(i, j, off_vert, element["letter"], font)
 
                 shape_font_stroke = None
                 if element["letter"] == letter.upper() and not found:
                     found = True
-                    shape_font_stroke = ((j - off_vert) * self._cell_x + self._MARGIN_X +
-                                         self._GLOBAL_OFFSET + text_width_off - 2,
-                                         i * self._cell_y + self._MARGIN_Y + text_height_off)
+                    shape_font_stroke = self._get_shape_for_font(i, j, off_vert,
+                                                                 element["letter"], font, opt_offsetter=2)
 
-                # draw.rectangle(shape, fill="#FFFFFF", outline="black")
-                # if off_vert == j:
-                #     if element["letter"] == "i".upper():
-                #         ##shape_font = (j * Sx + x - off_vert * Sx + global_shift + Sx / 2.5, i * Sy + y + Sy / 8)
-                #         shape_font_stroke = ((j - off_vert) * self._cell_x + self._MARGIN_X -
-                #                              self._GLOBAL_OFFSET + self._cell_x / 2.5 - 5,
-                #                              i * self._cell_y + self._MARGIN_Y + self._cell_y / 8)
-                #     else:
-                #         ##shape_font = (j * Sx + x - off_vert * Sx + global_shift + Sx / 4, i * Sy + y + Sx / 8)
-                #         shape_font_stroke = ((j - off_vert) * self._cell_x + self._MARGIN_X -
-                #                              self._GLOBAL_OFFSET + self._cell_x / 2.5 - 20,
-                #                              i * self._cell_y + self._MARGIN_Y + self._cell_y / 8)
-                #     cell = Cell(font=b_font,
-                #                 canvas=self._canvas,
-                #                 text_display=element["letter"].upper(),
-                #                 background_col="white",
-                #                 text_col="black",
-                #                 stroke_col="red",
-                #                 shape_rect=shape,
-                #                 shape_text=shape_font)
-                #     self._cells.append(cell)
-                # draw.text(shape_font_stroke, list_nume[i][j], fill="black", font=b_stroke, align="middle")
-                # draw.text(shape_font, list_nume[i][j], fill="red", font=b_font, align="middle")
-
-                # else:
-                cell = Cell(font=b_font,
-                            font_stroke=b_font_stroke,
+                cell = Cell(font=font,
+                            font_stroke=font_stroke,
                             canvas=self._canvas,
                             text_display=letter.upper(),
                             background_col="white",
                             text_col="black",
                             stroke_col="red",
                             shape_rect=shape,
-                            shape_text=shape_font,
+                            shape_text=poz_font,
                             shape_text_stroke=shape_font_stroke
                             )
                 self._cells.append(cell)
-                # draw.text(shape_font, list_nume[i][j], fill="black", font=font, align="middle")
 
     def run(self):
         """
@@ -140,8 +102,6 @@ class Crossword:
 
         self._save_image("pupikii_poza.png")
 
-        #value = input("Enter de cateva ori sa iesi sau apasa X din colt")
-
     def _get_input_from_user(self):
         self._main_candidate = input("Please enter the person's name: \n")
 
@@ -153,16 +113,81 @@ class Crossword:
                 "offset": 0
             })
 
+    def _get_shape_for_cell(self, i, j, off_vert):
+        """
+        Method that calculates the position and size of the shape of the crossword cell
+        :param i: the vertical offset of the crossword cell
+        :param j: the horizontal offset of the crossword cell
+        :param off_vert: the vertical offset in grid space size of the crossword
+        :return: None
+        """
+        x = CellPoint([self._cell_x] * 2) \
+            .set_mutliplier(values=[j - off_vert, j - off_vert + 1]) \
+            .set_offset(one=self._MARGIN_X) \
+            .set_offset(one=self._GLOBAL_OFFSET) \
+            .to_tuple()
+
+        y = CellPoint([self._cell_y] * 2) \
+            .set_mutliplier(values=[i, i + 1]) \
+            .set_offset(one=self._MARGIN_Y)\
+            .to_tuple()
+
+        return (x[0], y[0]), (x[1], y[1])
+
+    def _get_shape_for_font(self, i=0, j=0, off_vert=0, letter="", font=None, opt_offsetter=None):
+        """
+        Method to calculate the position of the font letter in the crossword puzzle
+        :param i: the vertical offset of the font letter
+        :param j: the horizontal offset of the font letter
+        :param off_vert: how many grid spaces to offset the letter
+        :param letter: the actual letter to be used to calculate its size on runtime
+        :param font: font object to be used by the cell renderer
+        :param opt_offsetter: Optional offsetter for
+        :return: None
+        """
+        text_width, text_height = get_text_dimensions(letter, font=font)
+        text_width_off, text_height_off = center_text(
+            (self._cell_x, self._cell_y),
+            (text_width, text_height))
+
+        poz_font = CellPoint([self._cell_y, self._cell_y])\
+            .set_mutliplier(values=[j-off_vert, i])\
+            .set_offset(values=[self._MARGIN_X, self._MARGIN_Y])\
+            .set_offset(values=[self._GLOBAL_OFFSET, 0])\
+            .set_offset(values=[text_width_off, text_height_off])
+
+        if opt_offsetter:
+            poz_font.set_offset(values=[-1 * abs(opt_offsetter), 0])
+
+        return poz_font.to_tuple()
+
     def _set_global_image_offset(self):
+        """
+        Calculate the global vertical offset of the crossword grid to the left in grid size units.
+        :return:
+        """
         self._GLOBAL_OFFSET = self.max_left_offset * self._cell_x
 
     def _get_cw_width(self) -> int:
+        """
+        Calculate the width of the canvas.
+        :return: Width of the canvas.
+        """
         return (self.max_left_offset + self.max_right_offset + 1) * self._cell_y + self._MARGIN_X * 2
 
     def _get_cw_height(self) -> int:
+        """
+        Calculate the height of the canvas.
+        :return: Height of the canvas.
+        """
         return len(self._main_candidate) * self._cell_y + self._MARGIN_Y * 2
 
     def _calculate_cw_size(self):
+        """
+        Method to calculate the width and height of the canvas to match the size of the calculated offsets
+        calculated in grid sizes.
+        :return: None
+        """
         self._set_offsets_for_words()
         self._calculate_max_left_offset()
         self._calculate_max_right_offset()
@@ -173,6 +198,10 @@ class Crossword:
         self._set_global_image_offset()
 
     def _set_offsets_for_words(self):
+        """
+        Method that calculates the offsets to the left for all the descriptions words
+        :return: None
+        """
         off_dict = self._offset_dictionary
         for item in off_dict:
             for count, letter in enumerate(item["word"].upper()):
@@ -181,11 +210,21 @@ class Crossword:
                     break
 
     def _calculate_max_left_offset(self):
+        """
+        Method that calculates the maximum offset to the left in relation to the center of the picture
+        calculated in grid sizes.
+        :return: None
+        """
         off_dict = self._offset_dictionary
         for item in off_dict:
             self.max_left_offset = item["offset"] if item["offset"] > self.max_left_offset else self.max_left_offset
 
     def _calculate_max_right_offset(self):
+        """
+        Method that calculates the maxium offset to the right in relation to the center of the picture
+        calculated in grid sizes.
+        :return: None
+        """
         off_dict = self._offset_dictionary
         for item in off_dict:
             r_off = len(item["word"]) - item["offset"] - 1
@@ -193,10 +232,20 @@ class Crossword:
                 self.max_right_offset = r_off
 
     def _render_all(self):
+        """
+        Method that does the rendering of all the cell in our crossword class
+        Iterates over all the cell and calls their render method
+        :return:
+        """
         for item in self._cells:
             item.render()
 
         self._cw_image.show()
 
     def _save_image(self, img_name):
-        self._cw_image.save(config.IMAGE_PATH + img_name, "PNG", trasparency=0)
+        """
+        Method to save the image on the local filesystem
+        :param img_name: Name of the image to save
+        :return:
+        """
+        self._cw_image.save(config.TARGET_PATH / img_name, "PNG", trasparency=0)

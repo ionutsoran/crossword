@@ -1,9 +1,20 @@
 from PIL import Image, ImageDraw, ImageFont
 from components.crossword import Crossword
+from components.render_util import get_font_from_resources
+import time
+import psycopg2
 
 if __name__ == "__main__":  # pragma: no cover
     cw = Crossword(cell_x=90, cell_y=90)
     cw.run()
+    # conn = psycopg2.connect("dbname='pupikii' user='postgres' host='172.17.0.2' password='postgres' port='5432'")
+    # cur = conn.cursor()
+    # # cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
+    # # conn.commit()
+    # cur.close()
+    # conn.close()
+    # time.sleep(3)
+    print("Hello world!")
     # w, h = 1280, 768
     # x, y = 28, 28
     # Sx, Sy = 90, 90

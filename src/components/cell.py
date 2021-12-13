@@ -1,5 +1,5 @@
 """
-Copyright Ionut Soran 2021
+Copyright Ionut Soran 2021. ALL RIGHTS RESERVED.
 Authors: [Ionut Soran]
 Maintainers: [Ionut Soran]
 """
