@@ -97,3 +97,16 @@ class TestCrossword:
         mocker.patch.object(crossword, '_offset_dictionary', new=self.get_offset_dictionary(candidate, adjectives))
 
         crossword.run()
+
+    @pytest.mark.parametrize("candidate", ["ștefania"])
+    @pytest.mark.parametrize("adjectives", [["Jucăușă", "Prietenoasă", "Veselă", "Afectuoasă", "Amabilă", "Cinstită",
+                                             "Sociabilă", "Calmă"]])
+    @pytest.mark.parametrize("crossword_args", [{"cw_image": None, "cell_x": 90, "cell_y": 90}])
+    def test_case_riul(self, mocker, candidate, adjectives, crossword_args):
+        mocker.patch('src.components.crossword.Crossword._get_input_from_user', return_value=None)
+
+        crossword = Crossword(**crossword_args)
+        mocker.patch.object(crossword, '_main_candidate', new=candidate)
+        mocker.patch.object(crossword, '_offset_dictionary', new=self.get_offset_dictionary(candidate, adjectives))
+
+        crossword.run()

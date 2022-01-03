@@ -7,7 +7,8 @@ Configuration file for crosswords project
 import pathlib
 
 # TODO ADD CONFIGS FOR TESTS AND FOR BUILING
-IMAGE_FORMAT = "RGBA"
+IMAGE_MODE = "RGBA"
+IMAGE_FORMAT = "PNG"
 TRANSPARENT_BACKGROUND = (255, 0, 0, 0)
 SRC_PATH = pathlib.Path(__file__).parent.resolve()
 PROJECT_PATH = SRC_PATH.parent
