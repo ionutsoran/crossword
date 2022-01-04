@@ -1,5 +1,5 @@
 """
-Copyright Ionut Soran 2021. ALL RIGHTS RESERVED.
+Copyright Ionut Soran 2022. ALL RIGHTS RESERVED.
 Authors: [Ionut Soran]
 Maintainers: [Ionut Soran]
 Crossword class for handling all the logic of the crossword design and rendering.
@@ -81,32 +81,41 @@ class Crossword:
                             )
                 self._cells.append(cell)
 
-    def run(self):
+    def run(self, main_candidate, adjectives):
         """
         Main method for handling the event logic
         :return: None
         """
-        self._get_input_from_user()
+        self._main_candidate = main_candidate
+        self._format_input_from_user(main_candidate, adjectives)
+        if self._check_if_worth_running(main_candidate, adjectives):
+            print("Its ok")
+        else:
+            print("Not Okay")
 
         self._calculate_cw_size()
 
         self._cw_image = Image.new(
-            config.IMAGE_FORMAT,
-            (self._cw_width, self._cw_height),
-            config.TRANSPARENT_BACKGROUND)
+            mode=config.IMAGE_MODE,
+            size=(self._cw_width, self._cw_height),
+            color=config.TRANSPARENT_BACKGROUND)
 
         self._canvas = ImageDraw.Draw(self._cw_image)
         self._setup_cells()
 
         self._render_all()
 
-        self._save_image("pupikii_poza.png")
+        return self._cw_image, self._cw_width, self._cw_height
 
-    def _get_input_from_user(self):
-        self._main_candidate = input("Please enter the person's name: \n")
-
-        for i in range(0, len(self._main_candidate)):
-            adjective = input("Please enter all the descriptions: \n")
+    def _format_input_from_user(self, main_candidate, adjectives):
+        """
+        TODO Add docstring
+        :param main_candidate:
+        :param adjectives:
+        :return:
+        """
+        for i in range(0, len(main_candidate)):
+            adjective = adjectives[i]
             self._offset_dictionary.append({
                 "letter": self._main_candidate[i].upper(),
                 "word": str(adjective).upper(),
@@ -240,12 +249,32 @@ class Crossword:
         for item in self._cells:
             item.render()
 
-        self._cw_image.show()
-
-    def _save_image(self, img_name):
+    def save_image(self, img_path=None):
         """
         Method to save the image on the local filesystem
-        :param img_name: Name of the image to save
+        :param img_path:
         :return:
         """
-        self._cw_image.save(config.TARGET_PATH / img_name, "PNG", trasparency=0)
+        if not img_path:
+            img_path = config.TARGET_PATH + ".png"
+
+        self._cw_image.save(img_path, "PNG", trasparency=0)
+
+    def _check_if_worth_running(self, main_candidate, adjectives):
+        """
+        TODO add docstring
+        :param main_candidate:
+        :param adjectives:
+        :return:
+        """
+        found = None
+        for item in self._offset_dictionary:
+            found = False
+            for letter in item["word"]:
+                if letter == item["letter"]:
+                    found = True
+                    break
+
+        if found:
+            return True
+        return False
