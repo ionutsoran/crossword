@@ -1,5 +1,5 @@
 """
-Copyright Ionut Soran 2021. ALL RIGHTS RESERVED.
+Copyright Ionut Soran 2022. ALL RIGHTS RESERVED.
 Authors: [Ionut Soran]
 Maintainers: [Ionut Soran]
 """
@@ -63,6 +63,11 @@ class CrosswordWidget:
         # palette.setBrush(QPalette.Window, QBrush(self.bg_img))
 
     def setupUi(self, main_window):
+        """
+        TODO add docstring and refactor
+        :param main_window:
+        :return:
+        """
         main_window.setObjectName("MainWindow")
         main_window.resize(1086, 795)
 
@@ -212,6 +217,11 @@ class CrosswordWidget:
         QtCore.QMetaObject.connectSlotsByName(main_window)
 
     def retranslateUi(self, main_window):
+        """
+        TODO add docstring
+        :param main_window:
+        :return:
+        """
         _translate = QtCore.QCoreApplication.translate
         main_window.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.groupBox.setTitle(_translate("MainWindow", ""))
@@ -235,6 +245,17 @@ class CrosswordWidget:
 
     def set_size_policy(self, q_size_policy_w, q_size_policy_h, w_stretch_index,
                         h_stretch_index, height_for_width, widget, widget_name):
+        """
+        TODO add docstring
+        :param q_size_policy_w:
+        :param q_size_policy_h:
+        :param w_stretch_index:
+        :param h_stretch_index:
+        :param height_for_width:
+        :param widget:
+        :param widget_name:
+        :return:
+        """
         size_policy = QSizePolicy(q_size_policy_w, q_size_policy_h)
         size_policy.setHorizontalStretch(w_stretch_index)
         size_policy.setVerticalStretch(h_stretch_index)
@@ -245,6 +266,10 @@ class CrosswordWidget:
         widget.setObjectName(widget_name)
 
     def run(self):
+        """
+        TODO add docstring
+        :return:
+        """
         self.setupUi(self.main_window)
         self.main_window.show()
         sys.exit(self.app.exec_())

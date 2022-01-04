@@ -1,5 +1,5 @@
 """
-Copyright Ionut Soran 2021. ALL RIGHTS RESERVED.
+Copyright Ionut Soran 2022. ALL RIGHTS RESERVED.
 Authors: [Ionut Soran]
 Maintainers: [Ionut Soran]
 Crossword class for handling all the logic of the crossword design and rendering.
@@ -249,13 +249,16 @@ class Crossword:
         for item in self._cells:
             item.render()
 
-    def save_image(self, img_path=config.TARGET_PATH):
+    def save_image(self, img_path=None):
         """
         Method to save the image on the local filesystem
         :param img_path:
         :return:
         """
-        self._cw_image.save(img_path + ".png", "PNG", trasparency=0)
+        if not img_path:
+            img_path = config.TARGET_PATH + ".png"
+
+        self._cw_image.save(img_path, "PNG", trasparency=0)
 
     def _check_if_worth_running(self, main_candidate, adjectives):
         """

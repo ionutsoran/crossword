@@ -19,6 +19,12 @@ def center_text(box_size, text_size):
 
 
 def get_text_dimensions(text, font):
+    """
+    TODO add docstring
+    :param text:
+    :param font:
+    :return:
+    """
     ascent, descent = font.getmetrics()
 
     text_width = font.getmask(text).getbbox()[2]

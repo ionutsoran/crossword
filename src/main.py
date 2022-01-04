@@ -1,8 +1,14 @@
-import time
-import psycopg2
+"""
+Copyright Ionut Soran 2022. ALL RIGHTS RESERVED.
+Authors: [Ionut Soran]
+Maintainers: [Ionut Soran]
+"""
 from layout.setup_layout import CrosswordWidget
 
 if __name__ == "__main__":  # pragma: no cover
+    """
+    TODO add docstring
+    """
     # cw = Crossword(cell_x=90, cell_y=90)
     # cw.run()
     cw = CrosswordWidget()
@@ -14,4 +20,3 @@ if __name__ == "__main__":  # pragma: no cover
     # cur.close()
     # conn.close()
     # time.sleep(3)
-    print("Hello world!")

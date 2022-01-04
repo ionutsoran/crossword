@@ -1,5 +1,5 @@
 """
-Copyright Ionut Soran 2021. ALL RIGHTS RESERVED.
+Copyright Ionut Soran 2022. ALL RIGHTS RESERVED.
 Authors: [Ionut Soran]
 Maintainers: [Ionut Soran]
 Configuration file for crosswords project
