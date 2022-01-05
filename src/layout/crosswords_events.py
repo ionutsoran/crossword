@@ -32,10 +32,12 @@ class CrosswordsEvents:
         TODO add docstring
         :return:
         """
+        to_gen_solution = not self.cw_widget.checkBox.isChecked()
         if self.cw_widget.lineEdit.text() and str.isalpha(self.cw_widget.lineEdit.text()):
             items = [self.cw_widget.listView.item(x).text() for x in range(self.cw_widget.listView.count())]
             cw_image, cw_width, cw_height = self.cw_widget.crossword.run(self.cw_widget.lineEdit.text(),
-                                                                         items)
+                                                                         items,
+                                                                         to_gen_solution)
 
             bg_img = self.get_background_image(cw_image, cw_width, cw_height)
             self.cw_widget.frame.setPixmap(QPixmap.fromImage(bg_img))
@@ -88,3 +90,10 @@ class CrosswordsEvents:
             self.cw_widget.listView.addItem(self.cw_widget.lineEdit_2.text())
             self.cw_widget.lineEdit.update()
         self.cw_widget.lineEdit_2.setText("")
+
+    def empty_cells_clicked(self):
+        """
+        TODO add docstring
+        :return:
+        """
+

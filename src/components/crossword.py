@@ -37,6 +37,8 @@ class Crossword:
 
         self._cw_image = cw_image
 
+        self.gen_solution = None
+
         if self._cw_image is not None:
             self._canvas = ImageDraw.Draw(self._cw_image)
         else:
@@ -72,6 +74,7 @@ class Crossword:
                             font_stroke=font_stroke,
                             canvas=self._canvas,
                             text_display=letter.upper(),
+                            gen_solution=self.gen_solution,
                             background_col="white",
                             text_col="black",
                             stroke_col="red",
@@ -81,31 +84,31 @@ class Crossword:
                             )
                 self._cells.append(cell)
 
-    def run(self, main_candidate, adjectives):
+    def run(self, main_candidate, adjectives, gen_solution=True):
         """
         Main method for handling the event logic
         :return: None
         """
+        self.gen_solution = gen_solution
         self._main_candidate = main_candidate
         self._format_input_from_user(main_candidate, adjectives)
-        if self._check_if_worth_running(main_candidate, adjectives):
-            print("Its ok")
-        else:
-            print("Not Okay")
+        if self._check_if_worth_running():
 
-        self._calculate_cw_size()
+            self._calculate_cw_size()
 
-        self._cw_image = Image.new(
-            mode=config.IMAGE_MODE,
-            size=(self._cw_width, self._cw_height),
-            color=config.TRANSPARENT_BACKGROUND)
+            self._cw_image = Image.new(
+                mode=config.IMAGE_MODE,
+                size=(self._cw_width, self._cw_height),
+                color=config.TRANSPARENT_BACKGROUND)
 
-        self._canvas = ImageDraw.Draw(self._cw_image)
-        self._setup_cells()
+            self._canvas = ImageDraw.Draw(self._cw_image)
+            self._setup_cells()
 
-        self._render_all()
+            self._render_all()
 
-        return self._cw_image, self._cw_width, self._cw_height
+            return self._cw_image, self._cw_width, self._cw_height
+
+        return tuple([None]*3)
 
     def _format_input_from_user(self, main_candidate, adjectives):
         """
@@ -260,7 +263,7 @@ class Crossword:
 
         self._cw_image.save(img_path, "PNG", trasparency=0)
 
-    def _check_if_worth_running(self, main_candidate, adjectives):
+    def _check_if_worth_running(self):
         """
         TODO add docstring
         :param main_candidate:
