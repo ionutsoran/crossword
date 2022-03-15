@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QListWidget, QSi
 
 from components.crossword import Crossword
 from layout.crosswords_events import CrosswordsEvents
+from layout.list_item_attribute_widget import CrosswordsItemWidget
 
 
 class CrosswordWidget:
@@ -64,8 +65,8 @@ class CrosswordWidget:
 
     def setupUi(self, main_window):
         """
-        TODO add docstring and refactor
-        :param main_window:
+        UI definition for the main window
+        :param main_window: QWidget
         :return:
         """
         main_window.setObjectName("MainWindow")
@@ -107,9 +108,9 @@ class CrosswordWidget:
         self.checkBox.setObjectName("checkBox")
         self.gridLayout_5.addWidget(self.checkBox, 0, 0, 1, 1)
 
-        self.checkBox_2 = QCheckBox(self.groupBox_3)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.gridLayout_5.addWidget(self.checkBox_2, 1, 0, 1, 1)
+        # self.checkBox_2 = QCheckBox(self.groupBox_3)
+        # self.checkBox_2.setObjectName("checkBox_2")
+        # self.gridLayout_5.addWidget(self.checkBox_2, 1, 0, 1, 1)
 
         self.frame_4 = QFrame(self.groupBox_3)
         self.frame_4.setFrameShape(QFrame.StyledPanel)
@@ -133,12 +134,14 @@ class CrosswordWidget:
         self.scrollArea = QScrollArea(self.groupBox)
         self.set_size_policy(QSizePolicy.Expanding, QSizePolicy.Expanding, 0, 0, True, self.scrollArea, "scrollArea")
         self.scrollArea.setWidgetResizable(True)
-        self.listView = QListWidget()
+        # self.listView = QListWidget()
+        #
+        # self.scrollAreaWidgetContents = self.listView
+        # self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 505, 373))
+        # self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        # self.scrollArea.setWidget(self.scrollAreaWidgetContents)
 
-        self.scrollAreaWidgetContents = self.listView
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 505, 373))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
+        self.scrollArea.setWidget(CrosswordsItemWidget())
         self.gridLayout_3.addWidget(self.scrollArea, 3, 0, 1, 3)
         self.label = QLabel(self.groupBox)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
@@ -196,27 +199,27 @@ class CrosswordWidget:
         self.menubar = QMenuBar(main_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1086, 22))
         self.menubar.setObjectName("menubar")
-        self.menuFile = QMenu(self.menubar)
-        self.menuFile.setObjectName("menuFile")
-        self.menuEdit = QMenu(self.menubar)
-        self.menuEdit.setObjectName("menuEdit")
-        self.menuOptions = QMenu(self.menubar)
-        self.menuOptions.setObjectName("menuOptions")
+        # self.menuFile = QMenu(self.menubar)
+        # self.menuFile.setObjectName("menuFile")
+        # self.menuEdit = QMenu(self.menubar)
+        # self.menuEdit.setObjectName("menuEdit")
+        # self.menuOptions = QMenu(self.menubar)
+        # self.menuOptions.setObjectName("menuOptions")
         self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName("menuHelp")
         main_window.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(main_window)
         self.statusbar.setObjectName("statusbar")
         main_window.setStatusBar(self.statusbar)
-        self.actionOpen_file = QAction(main_window)
-        self.actionOpen_file.setObjectName("actionOpen_file")
-        self.actionClear = QAction(main_window)
-        self.actionClear.setObjectName("actionClear")
-        self.menuFile.addAction(self.actionOpen_file)
-        self.menuFile.addAction(self.actionClear)
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuEdit.menuAction())
-        self.menubar.addAction(self.menuOptions.menuAction())
+        # self.actionOpen_file = QAction(main_window)
+        # self.actionOpen_file.setObjectName("actionOpen_file")
+        # self.actionClear = QAction(main_window)
+        # self.actionClear.setObjectName("actionClear")
+        # self.menuFile.addAction(self.actionOpen_file)
+        # self.menuFile.addAction(self.actionClear)
+        # self.menubar.addAction(self.menuFile.menuAction())
+        # self.menubar.addAction(self.menuEdit.menuAction())
+        # self.menubar.addAction(self.menuOptions.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
 
         self.retranslateUi(main_window)
@@ -224,7 +227,7 @@ class CrosswordWidget:
 
     def retranslateUi(self, main_window):
         """
-        TODO add docstring
+        Translater method for Widgets that have titles based on language
         :param main_window:
         :return:
         """
@@ -235,31 +238,31 @@ class CrosswordWidget:
         self.label_2.setText(_translate("MainWindow", "Main word"))
         self.button_named_add.setText(_translate("MainWindow", "Add"))
         self.groupBox_3.setTitle(_translate("MainWindow", ""))
-        self.checkBox.setText(_translate("MainWindow", "Empty cells only"))
-        self.checkBox_2.setText(_translate("MainWindow", ""))
+        self.checkBox.setText(_translate("MainWindow", "Make it uncomplete"))
+        #self.checkBox_2.setText(_translate("MainWindow", ""))
         self.label.setText(_translate("MainWindow", "Enter the attribute:"))
         self.groupBox_2.setTitle(_translate("MainWindow", ""))
         self.button_named_generate.setText(_translate("MainWindow", "Generate"))
         self.groupBox_4.setTitle(_translate("MainWindow", ""))
         self.button_named_save_as.setText(_translate("MainWindow", "Save as"))
-        self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
-        self.menuOptions.setTitle(_translate("MainWindow", "Options"))
+        # self.menuFile.setTitle(_translate("MainWindow", "File"))
+        # self.menuEdit.setTitle(_translate("MainWindow", "Edit"))
+        # self.menuOptions.setTitle(_translate("MainWindow", "Options"))
         self.menuHelp.setTitle(_translate("MainWindow", "Help"))
-        self.actionOpen_file.setText(_translate("MainWindow", "Open file"))
-        self.actionClear.setText(_translate("MainWindow", "Clear"))
+        # self.actionOpen_file.setText(_translate("MainWindow", "Open file"))
+        # self.actionClear.setText(_translate("MainWindow", "Clear"))
 
     def set_size_policy(self, q_size_policy_w, q_size_policy_h, w_stretch_index,
                         h_stretch_index, height_for_width, widget, widget_name):
         """
-        TODO add docstring
+        Method that sets different placement properties for a widget
         :param q_size_policy_w:
         :param q_size_policy_h:
-        :param w_stretch_index:
-        :param h_stretch_index:
+        :param w_stretch_index: int indexes for cell horizontal spanning in groupBox
+        :param h_stretch_index: int indexes for cell vertical spanning in groupBox
         :param height_for_width:
-        :param widget:
-        :param widget_name:
+        :param widget: QWidget Object
+        :param widget_name: str Name of the widget
         :return:
         """
         size_policy = QSizePolicy(q_size_policy_w, q_size_policy_h)
@@ -273,7 +276,7 @@ class CrosswordWidget:
 
     def run(self):
         """
-        TODO add docstring
+        Main running loop for the GUI
         :return:
         """
         self.setupUi(self.main_window)
